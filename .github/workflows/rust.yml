@@ -1,0 +1,31 @@
+name: Rust - Build exe
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: stable
+
+      - name: Compile
+        run: cargo build --release --example decompress
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pmw1-decompress-example
+          # The path where Cargo places the compiled example executable on Windows
+          path: target/release/examples/decompress.exe
+          retention-days: 7
